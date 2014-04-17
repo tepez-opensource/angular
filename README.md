@@ -2,6 +2,7 @@ changes
 =======
 * broweser mode - since angularjs is already loaded, we just use `window.angular`.
 * nodejs mode - load angularjs from client's directory so both client and server will use the same file.
+* load `angular-mocks` so we can run tests.
 
 angular
 ============
