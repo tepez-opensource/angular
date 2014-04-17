@@ -12,7 +12,7 @@ window = document.parentWindow
 
   # read angular source into memory
   # we use the same angularjs as the client uses
-  src = require("fs").readFileSync(__dirname + "/../../client/vendor/angular/angular.min.js", "utf8")
+  src = require("fs").readFileSync(__dirname + "/../../../client/vendor/angular/angular.min.js", "utf8")
 
   # replace implicit references
   src = src.replace("angular.element(document)", "window.angular.element(document)")
@@ -22,16 +22,13 @@ window = document.parentWindow
   (new Function("window", "document", src))(window, document)
 
 
-  # angular-mock won't define `angular.mock.module` otherwise
-  window.jasmine = true
+  # angular-mocks checks for `window.jasmine`, otherwise it won't define `angular.mock.module`
+  # we test for `beforeEach` to check if we run under jasmine
+  if beforeEach?
+    window.jasmine = true
 
-  beforeEach = afterEach = (x) -> x
-
-  src = require("fs").readFileSync(__dirname + "/../../client/vendor/angular-mocks/angular-mocks.js", "utf8")
-
-  # we eval so the code could see the nopes beforeEach and afterEach we defined
-  eval(src)
-
+  src = require("fs").readFileSync(__dirname + "/../../../client/vendor/angular-mocks/angular-mocks.js", "utf8")
+  (new Function("window", "document", src))(window, document)
 
 )()
 
