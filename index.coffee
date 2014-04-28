@@ -4,32 +4,47 @@
 
 fs = require('fs')
 jsdom = require('jsdom')
+xmlhttprequest = require('xmlhttprequest')
+q = require('q')
 
 document = jsdom.jsdom('<html><head></head><body></body></html>')
 window = document.parentWindow
+window.XMLHttpRequest = xmlhttprequest
 
-(() ->
+prevWindow = global.window
+prevDocument = global.document
+prevNavigator = global.navigator
+prevAngular = global.angular
 
-  # read angular source into memory
-  # we use the same angularjs as the client uses
-  src = require("fs").readFileSync(__dirname + "/../../../client/vendor/angular/angular.min.js", "utf8")
+global.window = window
+global.document = document
+global.navigator = window.navigator
 
-  # replace implicit references
-  src = src.split("angular.element(document)").join("window.angular.element(document)")
-  src = src.split("(navigator.userAgent)").join("(window.navigator.userAgent)")
-  src = src.split("angular.$$csp").join("window.angular.$$csp")
+# needed because angular is referenced as angular instead of window.angular
+global.angular = {
+  $$csp : () -> window.angular.$$csp.apply(window.angular, arguments)
+  element : () -> window.angular.element.apply(window.angular, arguments)
+}
 
-  (new Function("window", "document", src))(window, document)
+# angular-mocks checks for `window.jasmine`, otherwise it won't define `angular.mock.module`
+# we test for `beforeEach` to check if we run under jasmine
+if beforeEach?
+  window.jasmine = true
 
+require('../../../client/vendor/angular/angular.js')
+require('../../../client/vendor/angular-mocks/angular-mocks.js')
+require('../../../client/vendor/angular-sanitize/angular-sanitize.js')
 
-  # angular-mocks checks for `window.jasmine`, otherwise it won't define `angular.mock.module`
-  # we test for `beforeEach` to check if we run under jasmine
-  if beforeEach?
-    window.jasmine = true
+global.window = prevWindow
+global.document = prevDocument
+global.navigator = prevNavigator
 
-  src = require("fs").readFileSync(__dirname + "/../../../client/vendor/angular-mocks/angular-mocks.js", "utf8")
-  (new Function("window", "document", src))(window, document)
+# modify angular's $q to use kriskowal's q
+window.angular.module('ng').config(['$provide', ($provide) ->
+  $provide.decorator('$q', ['$delegate', ($delegate) ->
+    return q
+  ])
+])
 
-)()
+module.exports = global.angular = window.angular
 
-module.exports = window.angular
