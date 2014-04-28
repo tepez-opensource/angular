@@ -1,4 +1,4 @@
-# This file is used when requiring angular from the nodejs
+﻿# This file is used when requiring angular from the nodejs
 # we'll need to load angular's source, modify it a bit
 # and run it on artificial `window` and `document` created with `jsdom`
 
@@ -28,7 +28,7 @@ global.angular = {
 
 # angular-mocks checks for `window.jasmine`, otherwise it won't define `angular.mock.module`
 # we test for `beforeEach` to check if we run under jasmine
-if beforeEach?
+if global.jasmine?
   window.jasmine = true
 
 require('../../../client/vendor/angular/angular.js')
