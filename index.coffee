@@ -2,14 +2,9 @@
 # we'll need to load angular's source, modify it a bit
 # and run it on artificial `window` and `document` created with `jsdom`
 
-fs = require('fs')
-jsdom = require('jsdom')
-xmlhttprequest = require('xmlhttprequest')
 q = require('q')
+window = require('./window')
 
-document = jsdom.jsdom('<html><head></head><body></body></html>')
-window = document.parentWindow
-window.XMLHttpRequest = xmlhttprequest
 
 prevWindow = global.window
 prevDocument = global.document
@@ -17,7 +12,7 @@ prevNavigator = global.navigator
 prevAngular = global.angular
 
 global.window = window
-global.document = document
+global.document = window.document
 global.navigator = window.navigator
 
 # needed because angular is referenced as angular instead of window.angular
@@ -29,11 +24,20 @@ global.angular = {
 # angular-mocks checks for `window.jasmine`, otherwise it won't define `angular.mock.module`
 # we test for `beforeEach` to check if we run under jasmine
 if global.jasmine?
-  window.jasmine = true
+  window.jasmine = global.jasmine
+
+# jQuery will not expose on `window` so we have to do it ourself.
+# Has to be loaded before angular so `angular.element` will use jQuery
+jQuery = require('../../../client/vendor/jquery/dist/jquery.js')
+window.jQuery = window.$ = jQuery
 
 require('../../../client/vendor/angular/angular.js')
 require('../../../client/vendor/angular-mocks/angular-mocks.js')
 require('../../../client/vendor/angular-sanitize/angular-sanitize.js')
+
+# if we are testing, extend jasmine with jasmine-jquery
+if global.jasmine?
+  require('../../../client/vendor/jasmine-jquery/lib/jasmine-jquery.js')
 
 global.window = prevWindow
 global.document = prevDocument
@@ -41,9 +45,7 @@ global.navigator = prevNavigator
 
 # modify angular's $q to use kriskowal's q
 window.angular.module('ng').config(['$provide', ($provide) ->
-  $provide.decorator('$q', ['$delegate', ($delegate) ->
-    return q
-  ])
+  $provide.decorator('$q', () -> return q)
 ])
 
 module.exports = global.angular = window.angular
