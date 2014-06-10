@@ -25,19 +25,26 @@ global.angular = {
 # we test for `beforeEach` to check if we run under jasmine
 if global.jasmine?
   window.jasmine = global.jasmine
+  window.beforeEach = global.beforeEach
+  window.afterEach = global.afterEach
 
 # jQuery will not expose on `window` so we have to do it ourself.
 # Has to be loaded before angular so `angular.element` will use jQuery
-jQuery = require('../../../client/vendor/jquery/dist/jquery.js')
-window.jQuery = window.$ = jQuery
+if process.env.TP_JQUERY_PATH
+  jQuery = require(process.env.TP_JQUERY_PATH)
+  window.jQuery = window.$ = jQuery
 
-require('../../../client/vendor/angular/angular.js')
-require('../../../client/vendor/angular-mocks/angular-mocks.js')
-require('../../../client/vendor/angular-sanitize/angular-sanitize.js')
+require(process.env.TP_ANGULAR_PATH)
+
+if process.env.TP_ANGULAR_MOCKS_PATH
+  require(process.env.TP_ANGULAR_MOCKS_PATH)
+
+if process.env.TP_ANGULAR_SANITIZE_PATH
+  require(process.env.TP_ANGULAR_SANITIZE_PATH)
 
 # if we are testing, extend jasmine with jasmine-jquery
-if global.jasmine?
-  require('../../../client/vendor/jasmine-jquery/lib/jasmine-jquery.js')
+if global.jasmine? and process.env.TP_JASMINE_JQUERY_PATH
+  require(process.env.TP_JASMINE_JQUERY_PATH)
 
 global.window = prevWindow
 global.document = prevDocument
@@ -49,4 +56,3 @@ window.angular.module('ng').config(['$provide', ($provide) ->
 ])
 
 module.exports = global.angular = window.angular
-
