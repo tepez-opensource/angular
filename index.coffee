@@ -5,6 +5,20 @@
 q = require('q')
 window = require('./window')
 
+paths = {
+  jquery: process.env.TP_JQUERY_PATH
+  angular: process.env.TP_ANGULAR_PATH
+  ngMocks: process.env.TP_ANGULAR_MOCKS_PATH
+  ngSanitize: process.env.TP_ANGULAR_SANITIZE_PATH
+  jasmineJquery: process.env.TP_JASMINE_JQUERY_PATH
+}
+
+for name, path of paths when path
+  console.log("loading #{name} from #{path}")
+
+if not paths.angular
+  throw new Error('TP_ANGULAR_PATH must specify the path to the angular.js file')
+
 
 prevWindow = global.window
 prevDocument = global.document
@@ -30,21 +44,21 @@ if global.jasmine?
 
 # jQuery will not expose on `window` so we have to do it ourself.
 # Has to be loaded before angular so `angular.element` will use jQuery
-if process.env.TP_JQUERY_PATH
-  jQuery = require(process.env.TP_JQUERY_PATH)
+if paths.jquery
+  jQuery = require(paths.jquery)
   window.jQuery = window.$ = jQuery
 
-require(process.env.TP_ANGULAR_PATH)
+require(paths.angular)
 
-if process.env.TP_ANGULAR_MOCKS_PATH
-  require(process.env.TP_ANGULAR_MOCKS_PATH)
+if paths.ngMocks
+  require(paths.ngMocks)
 
-if process.env.TP_ANGULAR_SANITIZE_PATH
-  require(process.env.TP_ANGULAR_SANITIZE_PATH)
+if paths.ngSanitize
+  require(paths.ngSanitize)
 
 # if we are testing, extend jasmine with jasmine-jquery
-if global.jasmine? and process.env.TP_JASMINE_JQUERY_PATH
-  require(process.env.TP_JASMINE_JQUERY_PATH)
+if global.jasmine? and paths.jasmineJquery
+  require(paths.jasmineJquery)
 
 global.window = prevWindow
 global.document = prevDocument
