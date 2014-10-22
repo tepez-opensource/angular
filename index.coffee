@@ -20,10 +20,11 @@ if not paths.angular
   throw new Error('TP_ANGULAR_PATH must specify the path to the angular.js file')
 
 
-prevWindow = global.window
-prevDocument = global.document
-prevNavigator = global.navigator
-prevAngular = global.angular
+prevGlobal = {}
+globalKeys = ['window', 'document', 'navigator']
+
+for key in globalKeys when key of global
+  prevGlobal[key] = global[key]
 
 global.window = window
 global.document = window.document
@@ -60,9 +61,11 @@ if paths.ngSanitize
 if global.jasmine? and paths.jasmineJquery
   require(paths.jasmineJquery)
 
-global.window = prevWindow
-global.document = prevDocument
-global.navigator = prevNavigator
+for key in globalKeys
+  if key of prevGlobal
+    global[key] = prevGlobal[key]
+  else
+    delete global[key]
 
 # modify angular's $q to use kriskowal's q
 window.angular.module('ng').config(['$provide', ($provide) ->
