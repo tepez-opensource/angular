@@ -13,10 +13,11 @@ paths = {
   jasmineJquery: process.env.TP_JASMINE_JQUERY_PATH
 }
 
-for name, path of paths when path
-  console.log("loading #{name} from #{path}")
+if process.env.TP_VERBOSE
+  for name, path of paths when path
+    console.log("loading #{name} from #{path}")
 
-if not paths.angular
+unless paths.angular
   throw new Error('TP_ANGULAR_PATH must specify the path to the angular.js file')
 
 
