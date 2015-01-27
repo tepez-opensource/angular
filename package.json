@@ -1,36 +1,22 @@
-﻿{
+{
   "name": "angular",
-  "version": "2.0.0",
-  "description": "AngularJS provided as a CommonJS module. Compiled with jsdom when running in Node. Useful for client-side apps built with Browserify and for testing AngularJS code in Node without depending on a browser.",
-  "main": "index.js",
-  "browser": "index-browserify.coffee",
+  "version": "2.1.0",
+  "browser": "index-browserify.js",
   "scripts": {
-    "test": "tape test/index.js"
+    "test": "node node_modules/mocha/bin/mocha",
+    "test_debug": "node --debug-brk=5861 node_modules/mocha/bin/_mocha"
   },
   "repository": {
     "type": "git",
-    "url": "http://github.com/bclinkinbeard/angular.git"
-  },
-  "keywords": [
-    "angular",
-    "angularjs",
-    "commonjs",
-    "require",
-    "testing"
-  ],
-  "author": {
-    "name": "Ben Clinkinbeard",
-    "email": "ben.clinkinbeard@gmail.com"
+    "url": "https://github.com/tepez/angular"
   },
   "license": "MIT",
   "dependencies": {
-    "jsdom": "~0.8.8",
-	  "q": "~1.0.0",
-	  "coffee-script": "^1.7.1",
+    "jsdom": "~3.0.0",
     "node-env-flag": "~0.1.0"
   },
   "devDependencies": {
-    "tape": "~2.1.0",
-    "request": "~2.30.0"
+    "chai": "^1.10.0",
+    "mocha": "^2.1.0"
   }
 }

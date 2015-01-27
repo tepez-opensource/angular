@@ -1,0 +1,26 @@
+{
+  "name": "angular",
+  "main": "index.js",
+  "version": "2.0.1",
+  "homepage": "https://github.com/tepez/angular",
+  "authors": [
+    "Tom Yam <tomyam1@gmail.com>"
+  ],
+  "license": "MIT",
+  "private": true,
+  "ignore": [
+    "**/.*",
+    "node_modules",
+    "bower_components",
+    "test",
+    "tests"
+  ],
+  "devDependencies": {
+    "angular": "~1.3.11",
+    "jquery": "~2.1.3",
+    "jasmine-jquery": "~2.0.6",
+    "ngSanitize": "~0.0.2",
+    "angular-sanitize": "~1.3.11",
+    "angular-mocks": "~1.3.11"
+  }
+}
