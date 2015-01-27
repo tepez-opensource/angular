@@ -1,6 +1,9 @@
 angular for node
 ================
 
+[![Build Status](https://travis-ci.org/tepez/angular.svg?branch=master)](https://travis-ci.org/tepez/angular)
+
+
 Inspired by bclinkinbeard's [angular](https://github.com/bclinkinbeard/angular) with a lot of changes for a private use case:
 
 * Different entry point for browserify what export the already loaded angular (from `window.angular`).
