@@ -20,7 +20,8 @@ Inspired by bclinkinbeard's [angular](https://github.com/bclinkinbeard/angular) 
     TP_ANGULAR_MOCKS_PATH
     TP_ANGULAR_SANITIZE_PATH
     TP_JASMINE_JQUERY_PATH
-  
+
+
 * We use env variable `TP_VERBOSE` as a flag to control the printing of verbose log messages with the locations of the loaded scripts.
 
 * We use `mocha`/`chai` for testing instead of `tape`.
