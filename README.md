@@ -6,13 +6,14 @@ angular for node
 
 Inspired by bclinkinbeard's [angular](https://github.com/bclinkinbeard/angular) with a lot of changes for a private use case:
 
-* Different entry point for browserify what export the already loaded angular (from `window.angular`).
+* Different entry point for browserify that exports the already loaded angular (from `window.angular`).
 
 * We `require` the angular source instead of evaling it, to have meaningful stack traces.
 
-* We load several more modules: jquery, ngMocks, ngSanitize and jasmineJquery (only when testing, i.e. when the `global.jasmine` is defined)
+* We load several more modules: jquery, angular-mocks, angular-sanitize and jasmine-jquery. jasmine-jquery is loaded only when testing, i.e. when the `global.jasmine` is defined.
  
 * For each module, we have an env variable that determines the location from which its loaded. The module is only loaded if the env variable is defined:
+
 
     TP_JQUERY_PATH
     TP_ANGULAR_PATH
