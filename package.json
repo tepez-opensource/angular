@@ -1,5 +1,5 @@
 {
-  "name": "angular",
+  "name": "tepez-node-angular",
   "version": "2.1.0",
   "browser": "index-browserify.js",
   "scripts": {
