@@ -3,4 +3,4 @@
 // on it.
 var jsdom = require('jsdom');
 var document = jsdom.jsdom('<html><head></head><body></body></html>');
-module.exports = document.parentWindow;
+module.exports = document.defaultView;

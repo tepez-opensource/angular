@@ -5,5 +5,5 @@ install:
   - npm install
   - bower install --config.interactive=false
 node_js:
-  - "0.11"
-  - "0.10"
+  - 4.0
+  - 4

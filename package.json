@@ -1,6 +1,6 @@
 {
   "name": "tepez-node-angular",
-  "version": "2.1.0",
+  "version": "3.0.0",
   "browser": "index-browserify.js",
   "scripts": {
     "test": "node node_modules/mocha/bin/mocha",
@@ -12,11 +12,11 @@
   },
   "license": "MIT",
   "dependencies": {
-    "jsdom": "~3.0.0",
+    "jsdom": "~7.0.2",
     "node-env-flag": "~0.1.0"
   },
   "devDependencies": {
-    "chai": "^1.10.0",
-    "mocha": "^2.1.0"
+    "chai": "^3.4.1",
+    "mocha": "^2.3.3"
   }
 }
