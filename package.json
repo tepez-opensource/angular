@@ -1,5 +1,6 @@
 {
-  "name": "tepez-node-angular",
+  "private": true,
+  "name": "angular",
   "version": "3.0.0",
   "browser": "index-browserify.js",
   "scripts": {
