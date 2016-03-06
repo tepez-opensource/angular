@@ -5,7 +5,8 @@
 'use strict';
 
 const window = require('./window'),
-  envFlag = require('node-env-flag');
+  envFlag = require('node-env-flag'),
+  debug = require('debug')('node-angular');
 
 const paths = {
   jquery: process.env.TP_JQUERY_PATH,
@@ -15,11 +16,11 @@ const paths = {
   jasmineJquery: process.env.TP_JASMINE_JQUERY_PATH
 };
 
-if (envFlag(process.env.TP_VERBOSE)) {
-  Object.keys(paths).forEach((name) => {
-    console.log(`loading ${name} from ${paths[name]}`);
-  });
-}
+
+Object.keys(paths).forEach((name) => {
+  debug(`loading ${name} from ${paths[name]}`);
+});
+
 
 if (!paths.angular) {
   throw new Error('TP_ANGULAR_PATH must specify the path to the angular.js file');
