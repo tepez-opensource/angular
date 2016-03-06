@@ -6,7 +6,8 @@
 
 const window = require('./window'),
   envFlag = require('node-env-flag'),
-  debug = require('debug')('node-angular');
+  debug = require('debug')('node-angular'),
+  mockRequire = require('mock-require');
 
 const paths = {
   jquery: process.env.TP_JQUERY_PATH,
@@ -59,7 +60,10 @@ if (global.jasmine) {
 // jQuery will not expose on `window` so we have to do it ourselves.
 // Has to be loaded before angular so `angular.element` will use jQuery
 if (paths.jquery) {
-  window.jQuery = window.$ = require(paths.jquery);
+  const jQuery = window.jQuery = window.$ = require(paths.jquery);
+
+  // mock require('jquery') statements, otherwise jasmine-jquery will fail when it tries to require it
+  mockRequire('jquery', jQuery);
 }
 
 require(paths.angular);
@@ -76,6 +80,8 @@ if (paths.ngSanitize) {
 if (global.jasmine && paths.jasmineJquery) {
   require(paths.jasmineJquery);
 }
+
+mockRequire.stopAll();
 
 // restore of global
 globalKeys.forEach((key) => {
