@@ -1,5 +1,8 @@
+'use strict';
+
 const expect = require('chai').expect,
   path = require('path');
+
 
 
 describe('angular', () => {
@@ -42,7 +45,7 @@ describe('angular', () => {
     beforeEach(loadModules);
 
     it('angular should work', () => {
-      spec.angular.injector(['ng']).invoke(($rootScope, $compile) => {
+      spec.angular.injector(['ng']).invoke(function ($rootScope, $compile) {
         var el = spec.angular.element('<div>{{ 2 + 2 }}</div>');
         el = $compile(el)($rootScope);
         $rootScope.$digest();
@@ -51,7 +54,7 @@ describe('angular', () => {
     });
 
     it('angular should be able to sanitize html', () => {
-      angular.injector(['ng', 'ngSanitize']).invoke(($sce) => {
+      angular.injector(['ng', 'ngSanitize']).invoke(function ($sce) {
         expect($sce.getTrustedHtml('xxx<script>yyy</script>zzz')).to.equal('xxxzzz');
       });
     });
@@ -96,6 +99,27 @@ describe('angular', () => {
 
     it('jasmine-jquery should have been loaded', () => {
       expect(spec.window.jasmine.jQuery).to.be.an('Function');
+    });
+  });
+
+  describe('when globals where undefined before', () => {
+    it('should be undefined after', () => {
+      loadModules();
+      expect(global).not.to.have.property('window');
+      expect(global).not.to.have.property('document');
+      expect(global).not.to.have.property('navigator');
+    });
+  });
+
+  describe('when globals where defined before', () => {
+    it('should keep their values after', () => {
+      const window = global.window = () => {}
+      const document = global.document = () => {}
+      const navigator = global.navigator = () => {}
+      loadModules();
+      expect(global.window).to.equal(window);
+      expect(global.document).to.equal(document);
+      expect(global.navigator).to.equal(navigator);
     });
   });
 });

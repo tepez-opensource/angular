@@ -5,9 +5,9 @@
 'use strict';
 
 const window = require('./window'),
-  envFlag = require('node-env-flag'),
-  debug = require('debug')('node-angular'),
-  mockRequire = require('mock-require');
+    envFlag = require('node-env-flag'),
+    debug = require('debug')('node-angular'),
+    mockRequire = require('mock-require');
 
 const paths = {
   jquery: process.env.TP_JQUERY_PATH,
@@ -28,11 +28,13 @@ if (!paths.angular) {
 }
 
 const prevGlobal = {},
-  globalKeys = ['window', 'document', 'navigator'];
+    globalKeys = ['window', 'document', 'navigator'];
 
 // save the state of global before we start changing it
 globalKeys.forEach((key) => {
-  prevGlobal[key] = global[key];
+  if (key  in global) {
+    prevGlobal[key] = global[key];
+  }
 });
 
 global.window = window;
@@ -85,7 +87,11 @@ mockRequire.stopAll();
 
 // restore of global
 globalKeys.forEach((key) => {
-  global[key] = prevGlobal[key];
+  if (key in prevGlobal) {
+    global[key] = prevGlobal[key];
+  } else {
+    delete global[key];
+  }
 });
 
 module.exports = global.angular = window.angular;
