@@ -1,7 +1,6 @@
 {
   "name": "angular",
   "main": "index.js",
-  "version": "2.0.1",
   "homepage": "https://github.com/tepez/angular",
   "authors": [
     "Tom Yam <tomyam1@gmail.com>"
