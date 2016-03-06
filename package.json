@@ -4,8 +4,7 @@
   "version": "3.0.0",
   "browser": "index-browserify.js",
   "scripts": {
-    "test": "node node_modules/mocha/bin/mocha",
-    "test_debug": "node --debug-brk=5861 node_modules/mocha/bin/_mocha"
+    "test": "node node_modules/mocha/bin/mocha"
   },
   "repository": {
     "type": "git",
