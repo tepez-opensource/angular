@@ -2,10 +2,12 @@
 // we'll need to load angular's source, modify it a bit
 // and run it on artificial `window` and `document` created with `jsdom`
 
-var window = require('./window'),
+'use strict';
+
+const window = require('./window'),
   envFlag = require('node-env-flag');
 
-var paths = {
+const paths = {
   jquery: process.env.TP_JQUERY_PATH,
   angular: process.env.TP_ANGULAR_PATH,
   ngMocks: process.env.TP_ANGULAR_MOCKS_PATH,
@@ -14,28 +16,22 @@ var paths = {
 };
 
 if (envFlag(process.env.TP_VERBOSE)) {
-  for (var name in paths) {
-    var path = paths[name];
-    if (path) {
-      console.log("loading " + name + " from " + path);
-    }
-  }
+  Object.keys(paths).forEach((name) => {
+    console.log(`loading ${name} from ${paths[name]}`);
+  });
 }
 
 if (!paths.angular) {
   throw new Error('TP_ANGULAR_PATH must specify the path to the angular.js file');
 }
 
-var prevGlobal = {},
+const prevGlobal = {},
   globalKeys = ['window', 'document', 'navigator'];
 
 // save the state of global before we start changing it
-globalKeys.forEach(function (key) {
-  if (key in global) {
-    prevGlobal[key] = global[key];
-  }
+globalKeys.forEach((key) => {
+  prevGlobal[key] = global[key];
 });
-
 
 global.window = window;
 global.document = window.document;
@@ -53,7 +49,7 @@ global.angular = {
 
 // angular-mocks checks for `window.jasmine`, otherwise it won't define `angular.mock.module`
 // we test for `beforeEach` to check if we run under jasmine
-if (global.jasmine != null) {
+if (global.jasmine) {
   window.jasmine = global.jasmine;
   window.beforeEach = global.beforeEach;
   window.afterEach = global.afterEach;
@@ -76,17 +72,13 @@ if (paths.ngSanitize) {
 }
 
 // if we are testing, extend jasmine with jasmine-jquery
-if ((global.jasmine != null) && paths.jasmineJquery) {
+if (global.jasmine && paths.jasmineJquery) {
   require(paths.jasmineJquery);
 }
 
 // restore of global
-globalKeys.forEach(function (key) {
-  if (key in prevGlobal) {
-    global[key] = prevGlobal[key];
-  } else {
-    delete global[key];
-  }
+globalKeys.forEach((key) => {
+  global[key] = prevGlobal[key];
 });
 
 module.exports = global.angular = window.angular;
